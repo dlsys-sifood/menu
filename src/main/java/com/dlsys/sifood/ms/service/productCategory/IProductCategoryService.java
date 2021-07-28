@@ -1,4 +1,4 @@
-package com.dlsys.sifood.ms.service;
+package com.dlsys.sifood.ms.service.productCategory;
 
 import com.dlsys.sifood.ms.entity.ProductCategory;
 import com.dlsys.sifood.ms.models.GenericSearch;

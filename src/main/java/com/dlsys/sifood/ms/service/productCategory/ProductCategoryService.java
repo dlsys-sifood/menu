@@ -1,13 +1,12 @@
-package com.dlsys.sifood.ms.service;
+package com.dlsys.sifood.ms.service.productCategory;
 
 import com.dlsys.sifood.ms.dao.IProductCategoryDao;
-import com.dlsys.sifood.ms.dao.ITypeMenuDao;
 import com.dlsys.sifood.ms.dto.GenericResponse;
 import com.dlsys.sifood.ms.dto.ProductCategoryResponse;
-import com.dlsys.sifood.ms.dto.TypeMenuResponse;
 import com.dlsys.sifood.ms.entity.ProductCategory;
-import com.dlsys.sifood.ms.entity.TypeMenu;
 import com.dlsys.sifood.ms.models.GenericSearch;
+import com.dlsys.sifood.ms.service.GenericService;
+import com.dlsys.sifood.ms.service.ServiceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -22,16 +21,12 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
-public class ProductCategoryService implements IProductCategoryService{
+public class ProductCategoryService implements IProductCategoryService {
 
     private static final String BADREQUESTCODE = HttpStatus.BAD_REQUEST.toString();
     private static final String BADREQUESTDESCRIPTION = "BAD REQUEST";
-
-    private static final String OKREQUESTCODE = HttpStatus.OK.toString();
-    private static final String OKREQUESTDESCRIPTION = "OK";
 
     @Autowired
     IProductCategoryDao productDao;
@@ -39,51 +34,32 @@ public class ProductCategoryService implements IProductCategoryService{
     @Override
     public ResponseEntity<?> postProductCategory(ProductCategory product, BindingResult result) {
         if(result.hasErrors()){
-            return new ResponseEntity<Map<String, Object>>(ServiceResponse
-                    .responseGeneric(new GenericResponse(BADREQUESTCODE, BADREQUESTDESCRIPTION,
-                            result.getFieldErrors().stream()
-                                    .map(e -> "el campo: " + e.getField() + " " + e.getDefaultMessage())
-                                    .collect(Collectors.toList())))
-                    , HttpStatus.BAD_REQUEST);
+            return GenericService.getErrorsFieldResponse(result);
         }
-
         try {
             productDao.save(product);
         }catch(RuntimeException e){
             throw new RuntimeException(e);
         }
-
-        return new ResponseEntity<Map<String, Object>>(ServiceResponse
-                .responseProductCategory(new ProductCategoryResponse(BADREQUESTCODE, BADREQUESTDESCRIPTION,
-                        GenericResponse.toList("exito al guardar"), product)), HttpStatus.OK);
+        return GenericService.getSuccessfullProductCategory(product);
     }
 
     @Override
     public ResponseEntity<?> putProductCategory(ProductCategory product, BindingResult result) {
         if(result.hasErrors()){
-            return new ResponseEntity<Map<String, Object>>(ServiceResponse
-                    .responseGeneric(new GenericResponse(BADREQUESTCODE, BADREQUESTDESCRIPTION,
-                            result.getFieldErrors().stream()
-                                    .map(e -> "el campo: " + e.getField() + " " + e.getDefaultMessage())
-                                    .collect(Collectors.toList())))
-                    , HttpStatus.BAD_REQUEST);
+            return GenericService.getErrorsFieldResponse(result);
         }
-
         try {
             productDao.save(product);
         }catch(RuntimeException e){
             throw new RuntimeException(e);
         }
-
-        return new ResponseEntity<Map<String, Object>>(ServiceResponse
-                .responseProductCategory(new ProductCategoryResponse(OKREQUESTCODE, OKREQUESTDESCRIPTION,
-                        GenericResponse.toList("exito al guardar"), product)), HttpStatus.OK);
+        return GenericService.getSuccessfullProductCategory(product);
     }
 
     @Override
     public ResponseEntity<?> getProductCategory(GenericSearch product) {
         List<ProductCategory> response = new ArrayList<>();
-
         try {
             response = productDao.findAll(new Specification<ProductCategory>() {
                 @Override
@@ -101,17 +77,13 @@ public class ProductCategoryService implements IProductCategoryService{
         }catch(RuntimeException e){
             throw new RuntimeException(e);
         }
-
         if(response.isEmpty()){
             return new ResponseEntity<Map<String, Object>>(ServiceResponse
                     .responseProductCategory(new ProductCategoryResponse(BADREQUESTCODE, BADREQUESTDESCRIPTION,
                             GenericResponse.toList("consulta no encontrada"), response) )
                     , HttpStatus.OK);
         }
-
-        return new ResponseEntity<>(ServiceResponse
-                .responseProductCategory(new ProductCategoryResponse(OKREQUESTCODE, OKREQUESTDESCRIPTION,
-                        GenericResponse.toList("Consulta encontrada"), response)), HttpStatus.OK);
+        return GenericService.getSuccessfullListProductCategory(response);
     }
 
 }

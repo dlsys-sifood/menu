@@ -1,6 +1,5 @@
-package com.dlsys.sifood.ms.service;
+package com.dlsys.sifood.ms.service.menu;
 
-import com.dlsys.sifood.ms.dto.MenuResponse;
 import com.dlsys.sifood.ms.entity.Menu;
 import com.dlsys.sifood.ms.models.MenuSearch;
 import org.springframework.http.ResponseEntity;

@@ -2,7 +2,7 @@ package com.dlsys.sifood.ms.controller;
 
 import com.dlsys.sifood.ms.entity.Menu;
 import com.dlsys.sifood.ms.models.MenuSearch;
-import com.dlsys.sifood.ms.service.IMenuService;
+import com.dlsys.sifood.ms.service.menu.IMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;

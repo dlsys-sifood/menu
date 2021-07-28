@@ -1,4 +1,4 @@
-package com.dlsys.sifood.ms.service;
+package com.dlsys.sifood.ms.service.menu;
 
 import com.dlsys.sifood.ms.dao.IMenuDao;
 import com.dlsys.sifood.ms.dao.IProductDao;
@@ -7,6 +7,8 @@ import com.dlsys.sifood.ms.dto.GenericResponse;
 import com.dlsys.sifood.ms.dto.MenuResponse;
 import com.dlsys.sifood.ms.entity.Menu;
 import com.dlsys.sifood.ms.models.MenuSearch;
+import com.dlsys.sifood.ms.service.GenericService;
+import com.dlsys.sifood.ms.service.ServiceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -22,16 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
-public class MenuService implements IMenuService{
+public class MenuService implements IMenuService {
 
     private static final String BADREQUESTCODE = HttpStatus.BAD_REQUEST.toString();
     private static final String BADREQUESTDESCRIPTION = "BAD REQUEST";
-
-    private static final String OKREQUESTCODE = HttpStatus.OK.toString();
-    private static final String OKREQUESTDESCRIPTION = "OK";
 
     @Autowired
     IProductDao productDao;
@@ -43,14 +41,8 @@ public class MenuService implements IMenuService{
     @Override
     public ResponseEntity<?> postMenu(Menu menu, BindingResult result) {
         if(result.hasErrors()){
-            return new ResponseEntity<Map<String, Object>>(ServiceResponse
-                    .responseGeneric(new GenericResponse(BADREQUESTCODE, BADREQUESTDESCRIPTION,
-                            result.getFieldErrors().stream()
-                                    .map(e -> "el campo: " + e.getField() + " " + e.getDefaultMessage())
-                                    .collect(Collectors.toList())))
-                    , HttpStatus.BAD_REQUEST);
+            return GenericService.getErrorsFieldResponse(result);
         }
-
         try {
             menu.setTypeMenu(typeMenuDao.findById(menu.getTypeMenu().getId()).orElse(null));
             menu.setProduct(productDao.findById(menu.getProduct().getId()).orElse(null));
@@ -58,10 +50,7 @@ public class MenuService implements IMenuService{
         }catch(RuntimeException e){
             throw new RuntimeException(e);
         }
-
-        return new ResponseEntity<Map<String, Object>>(ServiceResponse
-                .responseMenu(new MenuResponse(OKREQUESTCODE, OKREQUESTDESCRIPTION,
-                        GenericResponse.toList("exito al guardar"), menu)), HttpStatus.OK);
+        return GenericService.getSuccessfullMenu(menu);
     }
 
     @Override
@@ -72,7 +61,6 @@ public class MenuService implements IMenuService{
     @Override
     public ResponseEntity<?> getMenu(MenuSearch menu) {
         List<Menu> response = new ArrayList<>();
-
         try {
             response = menuDao.findAll(new Specification<Menu>() {
                 @Override
@@ -96,16 +84,12 @@ public class MenuService implements IMenuService{
         }catch(RuntimeException e){
             throw new RuntimeException(e);
         }
-
         if(response.isEmpty()){
             return new ResponseEntity<Map<String, Object>>(ServiceResponse
                     .responseMenu(new MenuResponse(BADREQUESTCODE, BADREQUESTDESCRIPTION,
                             GenericResponse.toList("consulta no encontrada"), response) )
                     , HttpStatus.OK);
         }
-
-        return new ResponseEntity<>(ServiceResponse
-                .responseMenu(new MenuResponse(OKREQUESTCODE, OKREQUESTDESCRIPTION,
-                        GenericResponse.toList("Consulta encontrada"), response)), HttpStatus.OK);
+        return GenericService.getSuccessfullListMenu(response);
     }
 }
