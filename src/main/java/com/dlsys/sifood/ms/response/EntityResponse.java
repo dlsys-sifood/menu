@@ -1,4 +1,4 @@
-package com.dlsys.sifood.ms.service;
+package com.dlsys.sifood.ms.response;
 
 import com.dlsys.sifood.ms.dto.*;
 import com.dlsys.sifood.ms.entity.Menu;
@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-public class GenericService {
+public class EntityResponse {
 
     private static final String BADREQUESTCODE = HttpStatus.BAD_REQUEST.toString();
     private static final String BADREQUESTDESCRIPTION = "BAD REQUEST";
@@ -24,7 +24,7 @@ public class GenericService {
     private static final String OKREQUESTDESCRIPTION = "OK";
 
     public static ResponseEntity<?> getErrorsFieldResponse(BindingResult result){
-        return new ResponseEntity<Map<String, Object>>(ServiceResponse
+        return new ResponseEntity<Map<String, Object>>(ListResponse
                 .responseGeneric(new GenericResponse(BADREQUESTCODE, BADREQUESTDESCRIPTION,
                         result.getFieldErrors().stream()
                                 .map(e -> "el campo: " + e.getField() + " " + e.getDefaultMessage())
@@ -33,49 +33,49 @@ public class GenericService {
     }
 
     public static ResponseEntity<?> getSuccessfullListMenu(List<Menu> response){
-        return new ResponseEntity<>(ServiceResponse
+        return new ResponseEntity<>(ListResponse
                 .responseMenu(new MenuResponse(OKREQUESTCODE, OKREQUESTDESCRIPTION,
                         GenericResponse.toList("Consulta encontrada"), response)), HttpStatus.OK);
     }
 
     public static ResponseEntity<?> getSuccessfullMenu(Menu response){
-        return new ResponseEntity<>(ServiceResponse
+        return new ResponseEntity<>(ListResponse
                 .responseMenu(new MenuResponse(OKREQUESTCODE, OKREQUESTDESCRIPTION,
                         GenericResponse.toList("Exito al guardar"), response)), HttpStatus.OK);
     }
 
     public static ResponseEntity<?> getSuccessfullListProduct(List<Product> response){
-        return new ResponseEntity<Map<String, Object>>(ServiceResponse
+        return new ResponseEntity<Map<String, Object>>(ListResponse
                 .responseProduct(new ProductResponse(OKREQUESTCODE, OKREQUESTDESCRIPTION,
                         GenericResponse.toList("consulta encontrada"), response)), HttpStatus.OK);
     }
 
     public static ResponseEntity<?> getSuccessfullProduct(Product response){
-        return new ResponseEntity<Map<String, Object>>(ServiceResponse
+        return new ResponseEntity<Map<String, Object>>(ListResponse
                 .responseProduct(new ProductResponse(OKREQUESTCODE, OKREQUESTDESCRIPTION,
                         GenericResponse.toList("exito al guardar"), response)), HttpStatus.OK);
     }
 
     public static ResponseEntity<?> getSuccessfullListProductCategory(List<ProductCategory> response){
-        return new ResponseEntity<>(ServiceResponse
+        return new ResponseEntity<>(ListResponse
                 .responseProductCategory(new ProductCategoryResponse(OKREQUESTCODE, OKREQUESTDESCRIPTION,
                         GenericResponse.toList("Consulta encontrada"), response)), HttpStatus.OK);
     }
 
     public static ResponseEntity<?> getSuccessfullProductCategory(ProductCategory response){
-        return new ResponseEntity<Map<String, Object>>(ServiceResponse
+        return new ResponseEntity<Map<String, Object>>(ListResponse
                 .responseProductCategory(new ProductCategoryResponse(OKREQUESTCODE, OKREQUESTDESCRIPTION,
                         GenericResponse.toList("exito al guardar"), response)), HttpStatus.OK);
     }
 
     public static ResponseEntity<?> getSuccessfullListTypeMenu(List<TypeMenu> response){
-        return new ResponseEntity<>(ServiceResponse
+        return new ResponseEntity<>(ListResponse
                 .responseTypeMenu(new TypeMenuResponse(OKREQUESTCODE, OKREQUESTDESCRIPTION,
                         GenericResponse.toList("Consulta encontrada"), response)), HttpStatus.OK);
     }
 
     public static ResponseEntity<?> getSuccessfullTypeMenu(TypeMenu response){
-        return new ResponseEntity<Map<String, Object>>(ServiceResponse
+        return new ResponseEntity<Map<String, Object>>(ListResponse
                 .responseTypeMenu(new TypeMenuResponse(OKREQUESTCODE, OKREQUESTDESCRIPTION,
                         GenericResponse.toList("exito al guardar"), response)), HttpStatus.OK);
     }

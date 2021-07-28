@@ -1,4 +1,4 @@
-package com.dlsys.sifood.ms.service.menu;
+package com.dlsys.sifood.ms.service;
 
 import com.dlsys.sifood.ms.dao.IMenuDao;
 import com.dlsys.sifood.ms.dao.IProductDao;
@@ -7,8 +7,9 @@ import com.dlsys.sifood.ms.dto.GenericResponse;
 import com.dlsys.sifood.ms.dto.MenuResponse;
 import com.dlsys.sifood.ms.entity.Menu;
 import com.dlsys.sifood.ms.models.MenuSearch;
-import com.dlsys.sifood.ms.service.GenericService;
-import com.dlsys.sifood.ms.service.ServiceResponse;
+import com.dlsys.sifood.ms.response.EntityResponse;
+import com.dlsys.sifood.ms.response.ListResponse;
+import com.dlsys.sifood.ms.service.impl.IMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -32,16 +33,16 @@ public class MenuService implements IMenuService {
     private static final String BADREQUESTDESCRIPTION = "BAD REQUEST";
 
     @Autowired
-    IProductDao productDao;
+    private IProductDao productDao;
     @Autowired
-    IMenuDao menuDao;
+    private IMenuDao menuDao;
     @Autowired
-    ITypeMenuDao typeMenuDao;
+    private ITypeMenuDao typeMenuDao;
 
     @Override
     public ResponseEntity<?> postMenu(Menu menu, BindingResult result) {
         if(result.hasErrors()){
-            return GenericService.getErrorsFieldResponse(result);
+            return EntityResponse.getErrorsFieldResponse(result);
         }
         try {
             menu.setTypeMenu(typeMenuDao.findById(menu.getTypeMenu().getId()).orElse(null));
@@ -50,7 +51,7 @@ public class MenuService implements IMenuService {
         }catch(RuntimeException e){
             throw new RuntimeException(e);
         }
-        return GenericService.getSuccessfullMenu(menu);
+        return EntityResponse.getSuccessfullMenu(menu);
     }
 
     @Override
@@ -85,11 +86,11 @@ public class MenuService implements IMenuService {
             throw new RuntimeException(e);
         }
         if(response.isEmpty()){
-            return new ResponseEntity<Map<String, Object>>(ServiceResponse
+            return new ResponseEntity<Map<String, Object>>(ListResponse
                     .responseMenu(new MenuResponse(BADREQUESTCODE, BADREQUESTDESCRIPTION,
                             GenericResponse.toList("consulta no encontrada"), response) )
                     , HttpStatus.OK);
         }
-        return GenericService.getSuccessfullListMenu(response);
+        return EntityResponse.getSuccessfullListMenu(response);
     }
 }

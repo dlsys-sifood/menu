@@ -1,13 +1,13 @@
-package com.dlsys.sifood.ms.service.typeMenu;
+package com.dlsys.sifood.ms.service;
 
 import com.dlsys.sifood.ms.dao.ITypeMenuDao;
 import com.dlsys.sifood.ms.dto.GenericResponse;
 import com.dlsys.sifood.ms.dto.TypeMenuResponse;
 import com.dlsys.sifood.ms.entity.TypeMenu;
 import com.dlsys.sifood.ms.models.GenericSearch;
-import com.dlsys.sifood.ms.service.GenericService;
-import com.dlsys.sifood.ms.service.ServiceResponse;
-import com.dlsys.sifood.ms.service.typeMenu.ITypeMenuService;
+import com.dlsys.sifood.ms.response.EntityResponse;
+import com.dlsys.sifood.ms.response.ListResponse;
+import com.dlsys.sifood.ms.service.impl.ITypeMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,6 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -35,32 +34,32 @@ public class TypeMenuService implements ITypeMenuService {
     private static final String OKREQUESTDESCRIPTION = "OK";
 
     @Autowired
-    ITypeMenuDao typeMenuDao;
+    private ITypeMenuDao typeMenuDao;
 
     @Override
     public ResponseEntity<?> postMenuType(TypeMenu menu, BindingResult result) {
         if(result.hasErrors()){
-            return GenericService.getErrorsFieldResponse(result);
+            return EntityResponse.getErrorsFieldResponse(result);
         }
         try {
             typeMenuDao.save(menu);
         }catch(RuntimeException e){
             throw new RuntimeException(e);
         }
-        return GenericService.getSuccessfullTypeMenu(menu);
+        return EntityResponse.getSuccessfullTypeMenu(menu);
     }
 
     @Override
     public ResponseEntity<?> putMenuType(TypeMenu menu, BindingResult result) {
         if(result.hasErrors()){
-            return GenericService.getErrorsFieldResponse(result);
+            return EntityResponse.getErrorsFieldResponse(result);
         }
         try {
             typeMenuDao.save(menu);
         }catch(RuntimeException e){
             throw new RuntimeException(e);
         }
-        return GenericService.getSuccessfullTypeMenu(menu);
+        return EntityResponse.getSuccessfullTypeMenu(menu);
     }
 
     @Override
@@ -84,11 +83,11 @@ public class TypeMenuService implements ITypeMenuService {
             throw new RuntimeException(e);
         }
         if(dinning.isEmpty()){
-            return new ResponseEntity<Map<String, Object>>(ServiceResponse
+            return new ResponseEntity<Map<String, Object>>(ListResponse
                     .responseTypeMenu(new TypeMenuResponse(BADREQUESTCODE, BADREQUESTDESCRIPTION,
                             GenericResponse.toList("consulta no encontrada"), dinning))
                     , HttpStatus.OK);
         }
-        return GenericService.getSuccessfullListTypeMenu(dinning);
+        return EntityResponse.getSuccessfullListTypeMenu(dinning);
     }
 }

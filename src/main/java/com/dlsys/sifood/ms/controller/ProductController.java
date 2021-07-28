@@ -2,7 +2,7 @@ package com.dlsys.sifood.ms.controller;
 
 import com.dlsys.sifood.ms.entity.Product;
 import com.dlsys.sifood.ms.models.ProductSearch;
-import com.dlsys.sifood.ms.service.product.IProductService;
+import com.dlsys.sifood.ms.service.impl.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -17,7 +17,7 @@ import javax.validation.Valid;
 @RequestMapping(value = "/menu")
 public class ProductController {
     @Autowired
-    IProductService productService;
+    private IProductService productService;
 
     @RequestMapping(method = RequestMethod.POST, value = "/product")
     public ResponseEntity<?> postDinningTable(@Valid @RequestBody Product product, BindingResult result) {

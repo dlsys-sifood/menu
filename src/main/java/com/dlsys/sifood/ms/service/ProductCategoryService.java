@@ -1,12 +1,13 @@
-package com.dlsys.sifood.ms.service.productCategory;
+package com.dlsys.sifood.ms.service;
 
 import com.dlsys.sifood.ms.dao.IProductCategoryDao;
 import com.dlsys.sifood.ms.dto.GenericResponse;
 import com.dlsys.sifood.ms.dto.ProductCategoryResponse;
 import com.dlsys.sifood.ms.entity.ProductCategory;
 import com.dlsys.sifood.ms.models.GenericSearch;
-import com.dlsys.sifood.ms.service.GenericService;
-import com.dlsys.sifood.ms.service.ServiceResponse;
+import com.dlsys.sifood.ms.response.EntityResponse;
+import com.dlsys.sifood.ms.response.ListResponse;
+import com.dlsys.sifood.ms.service.impl.IProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -29,32 +30,32 @@ public class ProductCategoryService implements IProductCategoryService {
     private static final String BADREQUESTDESCRIPTION = "BAD REQUEST";
 
     @Autowired
-    IProductCategoryDao productDao;
+    private IProductCategoryDao productDao;
 
     @Override
     public ResponseEntity<?> postProductCategory(ProductCategory product, BindingResult result) {
         if(result.hasErrors()){
-            return GenericService.getErrorsFieldResponse(result);
+            return EntityResponse.getErrorsFieldResponse(result);
         }
         try {
             productDao.save(product);
         }catch(RuntimeException e){
             throw new RuntimeException(e);
         }
-        return GenericService.getSuccessfullProductCategory(product);
+        return EntityResponse.getSuccessfullProductCategory(product);
     }
 
     @Override
     public ResponseEntity<?> putProductCategory(ProductCategory product, BindingResult result) {
         if(result.hasErrors()){
-            return GenericService.getErrorsFieldResponse(result);
+            return EntityResponse.getErrorsFieldResponse(result);
         }
         try {
             productDao.save(product);
         }catch(RuntimeException e){
             throw new RuntimeException(e);
         }
-        return GenericService.getSuccessfullProductCategory(product);
+        return EntityResponse.getSuccessfullProductCategory(product);
     }
 
     @Override
@@ -78,12 +79,12 @@ public class ProductCategoryService implements IProductCategoryService {
             throw new RuntimeException(e);
         }
         if(response.isEmpty()){
-            return new ResponseEntity<Map<String, Object>>(ServiceResponse
+            return new ResponseEntity<Map<String, Object>>(ListResponse
                     .responseProductCategory(new ProductCategoryResponse(BADREQUESTCODE, BADREQUESTDESCRIPTION,
                             GenericResponse.toList("consulta no encontrada"), response) )
                     , HttpStatus.OK);
         }
-        return GenericService.getSuccessfullListProductCategory(response);
+        return EntityResponse.getSuccessfullListProductCategory(response);
     }
 
 }

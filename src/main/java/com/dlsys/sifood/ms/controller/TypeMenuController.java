@@ -2,7 +2,7 @@ package com.dlsys.sifood.ms.controller;
 
 import com.dlsys.sifood.ms.entity.TypeMenu;
 import com.dlsys.sifood.ms.models.GenericSearch;
-import com.dlsys.sifood.ms.service.typeMenu.ITypeMenuService;
+import com.dlsys.sifood.ms.service.impl.ITypeMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -18,7 +18,7 @@ import javax.validation.Valid;
 public class TypeMenuController {
 
     @Autowired
-    ITypeMenuService typeService;
+    private ITypeMenuService typeService;
 
     @RequestMapping(method = RequestMethod.POST, value = "/typeMenu")
     public ResponseEntity<?> postDinningTable(@Valid @RequestBody TypeMenu dinning, BindingResult result) {

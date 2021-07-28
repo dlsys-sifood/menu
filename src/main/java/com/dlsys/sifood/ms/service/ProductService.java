@@ -1,4 +1,4 @@
-package com.dlsys.sifood.ms.service.product;
+package com.dlsys.sifood.ms.service;
 
 import com.dlsys.sifood.ms.dao.IProductCategoryDao;
 import com.dlsys.sifood.ms.dao.IProductDao;
@@ -6,8 +6,9 @@ import com.dlsys.sifood.ms.dto.GenericResponse;
 import com.dlsys.sifood.ms.dto.ProductResponse;
 import com.dlsys.sifood.ms.entity.Product;
 import com.dlsys.sifood.ms.models.ProductSearch;
-import com.dlsys.sifood.ms.service.GenericService;
-import com.dlsys.sifood.ms.service.ServiceResponse;
+import com.dlsys.sifood.ms.response.EntityResponse;
+import com.dlsys.sifood.ms.response.ListResponse;
+import com.dlsys.sifood.ms.service.impl.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductService implements IProductService {
@@ -32,14 +32,14 @@ public class ProductService implements IProductService {
     private static final String BADREQUESTDESCRIPTION = "BAD REQUEST";
 
     @Autowired
-    IProductDao productDao;
+    private IProductDao productDao;
     @Autowired
-    IProductCategoryDao categoryDao;
+    private IProductCategoryDao categoryDao;
 
     @Override
     public ResponseEntity<?> postProduct(Product product, BindingResult result) {
         if(result.hasErrors()){
-            return GenericService.getErrorsFieldResponse(result);
+            return EntityResponse.getErrorsFieldResponse(result);
         }
         try {
             product.setCategory(categoryDao.findById(product.getCategory().getId()).orElse(null));
@@ -47,13 +47,13 @@ public class ProductService implements IProductService {
         }catch(RuntimeException e){
             throw new RuntimeException(e);
         }
-        return GenericService.getSuccessfullProduct(product);
+        return EntityResponse.getSuccessfullProduct(product);
     }
 
     @Override
     public ResponseEntity<?> putProduct(Product product, BindingResult result) {
         if(result.hasErrors()){
-            return GenericService.getErrorsFieldResponse(result);
+            return EntityResponse.getErrorsFieldResponse(result);
         }
         try {
             product.setCategory(categoryDao.findById(product.getCategory().getId()).orElse(null));
@@ -61,7 +61,7 @@ public class ProductService implements IProductService {
         }catch(RuntimeException e){
             throw new RuntimeException(e);
         }
-        return GenericService.getSuccessfullProduct(product);
+        return EntityResponse.getSuccessfullProduct(product);
     }
 
     @Override
@@ -85,11 +85,11 @@ public class ProductService implements IProductService {
             throw new RuntimeException(e);
         }
         if(response.isEmpty()){
-            return new ResponseEntity<Map<String, Object>>(ServiceResponse
+            return new ResponseEntity<Map<String, Object>>(ListResponse
                     .responseProduct(new ProductResponse(BADREQUESTCODE, BADREQUESTDESCRIPTION,
                             GenericResponse.toList("consulta no encontrada"), response) )
                     , HttpStatus.OK);
         }
-        return GenericService.getSuccessfullListProduct(response);
+        return EntityResponse.getSuccessfullListProduct(response);
     }
 }

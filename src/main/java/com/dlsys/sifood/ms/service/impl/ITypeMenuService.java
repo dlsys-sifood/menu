@@ -1,4 +1,4 @@
-package com.dlsys.sifood.ms.service.typeMenu;
+package com.dlsys.sifood.ms.service.impl;
 
 import com.dlsys.sifood.ms.entity.TypeMenu;
 import com.dlsys.sifood.ms.models.GenericSearch;

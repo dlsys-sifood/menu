@@ -1,4 +1,4 @@
-package com.dlsys.sifood.ms.service;
+package com.dlsys.sifood.ms.response;
 
 import com.dlsys.sifood.ms.dto.*;
 import org.springframework.stereotype.Component;
@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class ServiceResponse {
+public class ListResponse {
 
     public static Map<String, Object> responseGeneric(GenericResponse generic){
         Map<String, Object> response = new HashMap<>();
