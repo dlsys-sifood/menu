@@ -1,33 +1,24 @@
-package com.dlsys.sifood.ms.service;
+package com.dlsys.sifood.ms.service.impl;
 
 import com.dlsys.sifood.ms.dao.IProductCategoryDao;
-import com.dlsys.sifood.ms.dto.GenericResponse;
-import com.dlsys.sifood.ms.dto.ProductCategoryResponse;
 import com.dlsys.sifood.ms.entity.ProductCategory;
 import com.dlsys.sifood.ms.models.GenericSearch;
 import com.dlsys.sifood.ms.response.EntityResponse;
-import com.dlsys.sifood.ms.response.ListResponse;
-import com.dlsys.sifood.ms.service.impl.IProductCategoryService;
+import com.dlsys.sifood.ms.service.IProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ProductCategoryService implements IProductCategoryService {
-
-    private static final String BADREQUESTCODE = HttpStatus.BAD_REQUEST.toString();
-    private static final String BADREQUESTDESCRIPTION = "BAD REQUEST";
 
     @Autowired
     private IProductCategoryDao productDao;
@@ -79,10 +70,7 @@ public class ProductCategoryService implements IProductCategoryService {
             throw new RuntimeException(e);
         }
         if(response.isEmpty()){
-            return new ResponseEntity<Map<String, Object>>(ListResponse
-                    .responseProductCategory(new ProductCategoryResponse(BADREQUESTCODE, BADREQUESTDESCRIPTION,
-                            GenericResponse.toList("consulta no encontrada"), response) )
-                    , HttpStatus.OK);
+            return EntityResponse.getNotFoundMessage();
         }
         return EntityResponse.getSuccessfullListProductCategory(response);
     }

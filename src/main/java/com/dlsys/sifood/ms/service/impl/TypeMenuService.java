@@ -1,37 +1,26 @@
-package com.dlsys.sifood.ms.service;
+package com.dlsys.sifood.ms.service.impl;
 
 import com.dlsys.sifood.ms.dao.ITypeMenuDao;
-import com.dlsys.sifood.ms.dto.GenericResponse;
-import com.dlsys.sifood.ms.dto.TypeMenuResponse;
 import com.dlsys.sifood.ms.entity.TypeMenu;
 import com.dlsys.sifood.ms.models.GenericSearch;
 import com.dlsys.sifood.ms.response.EntityResponse;
-import com.dlsys.sifood.ms.response.ListResponse;
-import com.dlsys.sifood.ms.service.impl.ITypeMenuService;
+import com.dlsys.sifood.ms.service.ITypeMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
 
 
 @Service
 public class TypeMenuService implements ITypeMenuService {
-
-    private static final String BADREQUESTCODE = HttpStatus.BAD_REQUEST.toString();
-    private static final String BADREQUESTDESCRIPTION = "BAD REQUEST";
-
-    private static final String OKREQUESTCODE = HttpStatus.OK.toString();
-    private static final String OKREQUESTDESCRIPTION = "OK";
 
     @Autowired
     private ITypeMenuDao typeMenuDao;
@@ -83,10 +72,7 @@ public class TypeMenuService implements ITypeMenuService {
             throw new RuntimeException(e);
         }
         if(dinning.isEmpty()){
-            return new ResponseEntity<Map<String, Object>>(ListResponse
-                    .responseTypeMenu(new TypeMenuResponse(BADREQUESTCODE, BADREQUESTDESCRIPTION,
-                            GenericResponse.toList("consulta no encontrada"), dinning))
-                    , HttpStatus.OK);
+            return EntityResponse.getNotFoundMessage();
         }
         return EntityResponse.getSuccessfullListTypeMenu(dinning);
     }

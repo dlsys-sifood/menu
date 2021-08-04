@@ -1,35 +1,26 @@
-package com.dlsys.sifood.ms.service;
+package com.dlsys.sifood.ms.service.impl;
 
 import com.dlsys.sifood.ms.dao.IProductCategoryDao;
 import com.dlsys.sifood.ms.dao.IProductDao;
-import com.dlsys.sifood.ms.dto.GenericResponse;
-import com.dlsys.sifood.ms.dto.ProductResponse;
 import com.dlsys.sifood.ms.entity.Product;
 import com.dlsys.sifood.ms.models.ProductSearch;
 import com.dlsys.sifood.ms.response.EntityResponse;
-import com.dlsys.sifood.ms.response.ListResponse;
-import com.dlsys.sifood.ms.service.impl.IProductService;
+import com.dlsys.sifood.ms.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Service
 public class ProductService implements IProductService {
-
-    private static final String BADREQUESTCODE = HttpStatus.BAD_REQUEST.toString();
-    private static final String BADREQUESTDESCRIPTION = "BAD REQUEST";
 
     @Autowired
     private IProductDao productDao;
@@ -85,10 +76,7 @@ public class ProductService implements IProductService {
             throw new RuntimeException(e);
         }
         if(response.isEmpty()){
-            return new ResponseEntity<Map<String, Object>>(ListResponse
-                    .responseProduct(new ProductResponse(BADREQUESTCODE, BADREQUESTDESCRIPTION,
-                            GenericResponse.toList("consulta no encontrada"), response) )
-                    , HttpStatus.OK);
+            return EntityResponse.getNotFoundMessage();
         }
         return EntityResponse.getSuccessfullListProduct(response);
     }

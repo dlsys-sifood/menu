@@ -1,4 +1,4 @@
-package com.dlsys.sifood.ms.service.impl;
+package com.dlsys.sifood.ms.service;
 
 import com.dlsys.sifood.ms.entity.Product;
 import com.dlsys.sifood.ms.models.ProductSearch;

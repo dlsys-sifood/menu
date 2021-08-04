@@ -2,17 +2,19 @@ package com.dlsys.sifood.ms.controller;
 
 import com.dlsys.sifood.ms.entity.TypeMenu;
 import com.dlsys.sifood.ms.models.GenericSearch;
-import com.dlsys.sifood.ms.service.impl.ITypeMenuService;
+import com.dlsys.sifood.ms.service.ITypeMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+@EnableSwagger2
 @RestController
 @RequestMapping(value = "/menu")
 public class TypeMenuController {
