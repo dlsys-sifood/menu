@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MenuSearch extends GenericSearch{
-    private String idProduct;
-    private String idTypeMenu;
+    private String idProduct="";
+    private String idTypeMenu="";
 }
 

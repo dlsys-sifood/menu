@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProductSearch extends GenericSearch{
-    private String price;
-    private String timeStimation;
+    private String price="";
+    private String timeStimation="";
 }
